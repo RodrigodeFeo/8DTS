@@ -1,0 +1,762 @@
+---
+title: "Introdução"
+author: "Adelaide Alves"
+date: "2023-11-23"
+output:
+  html_document: default
+  word_document: default
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# echo: tipo logical. Incluir o código do chunk ou não no documento compilado.
+# include: tipo logical. Controla se o chunk e o output estarão presentes no documento final.
+```
+
+###  Análise Exploratória de dados (AED) - Analise Descritiva
+  Tem por objetivo organizar, descrever e apresentar os dados, de uma determinada população, em tabelas, gráficos e medidas de resumo.
+  A  estatística descritiva, juntamente com a visualização de dados, permite descobrir informações relevantes sobre cada variável analisada, bem como relações entre elas.
+
+  Entretanto, quando a quantidade de variáveis em análise é grande e/ou seu relacionamento complexo, normalmente não linear, não conseguimos inferir corretamente as relações existentes, seja por limitação de nossa capacidade de avaliação, seja pela limitação dos métodos estatísticos.
+
+Nesse momento são usadas técnicas de aprendizado de máquina para tentar descobrir as relações complexas presentes nos dados.
+
+Ambas as técnicas (estatística e aprendizado de máquina) atuam sobre dados, buscando extrair informações.
+
+A principal diferença é até onde vai nossa capacidade de interpretação e a partir de onde delegamos a interpretação para a máquina.
+
+Técnicas estatísticas têm a vantagem de apresentar resultados com margem de erro e nível de confiança. Aprendizado de máquina tem a vantagem de conseguir tratar relacionamentos complexos.
+
+
+# ----------------------------
+# Introducao R
+# ----------------------------
+
+```{r }
+
+# escrever o nome do objeto em caixa alta ou baixa faz diferença no R
+r=0
+R=1
+
+```
+
+```{r }
+
+#----------------------------
+# Calculadora
+#----------------------------
+
+
+# operacoes matematicas
+
+# +, -, /, *, sqrt, potencia(^, **), log(base=2,10,....)
+
+# soma
+2+2
+# subtracao
+4-2
+```
+
+```{r }
+# subtracao
+4-2
+
+```
+
+```{r }
+# multiplacao
+4*2
+
+# potencia
+4^2
+```
+
+```{r }
+# raiz quadrada
+sqrt(4)
+```
+
+```{r }
+# logaritmo na base 2
+
+log2(4)
+```
+
+```{r }
+# logaritmo na base 10
+log10(4)
+```
+
+```{r }
+# logaritmo natura (ln)
+log(4)
+```
+
+```{r }
+# divisao
+4/2
+```
+
+```{r }
+# guardar o resultado de uma operacao em um objeto
+
+x <- 14
+
+x = 14
+
+y <- 2
+```
+
+
+```{r }
+z <- x+y
+z
+```
+
+```{r }
+z <- x+y ; z
+```
+
+```{r }
+z <- x/y
+z
+```
+
+```{r }
+# parte inteira da divisao entre x e y
+
+q <- x %/% y
+q
+```
+
+```{r }
+# resto da divisao entre x e y
+r <- x %% y
+r
+```
+
+```{r }
+# operador logico
+# >, >=, <, <=, != (diferente), == (igual), &, | (ou), ! negacao
+
+
+a <- 5
+b <- 10
+```
+
+```{r }
+# igual
+
+a == b
+```
+
+```{r }
+# diferente
+a != b
+```
+
+```{r }
+# maior que
+a > b
+```
+
+```{r }
+# maior igual que
+a >= b
+```
+
+```{r }
+# menor que
+a < b
+```
+
+```{r }
+# menor igual que
+a <= b
+
+
+```
+
+```{r dados1}
+
+# vetor 1 x 4
+# criar um vetor X = 25, 32, 29, 45
+
+
+# idade dos colaboradores da empresa x
+
+
+# .Funções
+# Fazem parte de um PACOTE
+# Pacotes contém muitas funções e precisam estar instalados
+# Não sendo um pacote padrão(base) ele precisa ser chamado
+
+#?c
+
+
+# c = concatenar
+
+X <- c(25,32,29,45)
+
+X
+
+# ou 
+
+print(X)
+```
+
+
+```{r cálculos1}
+
+# quantas observacoes tem o vetor X
+nobs <- length(X)
+nobs
+
+
+cat("quantidade de registros", length(X))
+
+# ?cat
+
+```
+
+
+```{r cálculos2}
+
+
+cat("soma das observações", sum(X))
+
+```
+
+```{r cálculos3}
+
+# Média Aritmética
+# Soma de valores dividido por n
+
+
+Média_x = sum(X)/length(X)
+
+cat("média", Média_x, '\n')
+
+
+cat("média utilizando a funcao mean", mean(X))
+
+```
+
+```{r dados2}
+
+# idade dos colaboradores da empresa y
+
+Y = c(60,25,32,29,45)
+
+cat("média de idade dos colaboradores empresa Y", mean(X), "anos")
+
+```
+
+#### Mediana
+ É uma medida que, como média, também procura caracterizar o centro da distribuição da frequência.
+ Ela é calculada com base na ordem dos valores que formam o conjunto dos dados.
+ Os modelos são diferentes para situações onde existem um número ímpar ou par de observações.
+ 
+  Mediana: definida como o valor central das observações ordenadas quando n for ímpar. 
+  Para os casos em que n for par, a mediana é definida como valor médio entre as duas observações centrais ordenadas
+
+
+
+```{r mediana}
+
+# Calculando a Mediana da variável X:
+median_X <- median(X)
+print(median_X)
+
+# Calculando a Mediana da variável Y:
+median_y <- median(Y)
+print(median_y)
+```
+
+
+
+```{r summary}
+
+print("usando summary em X")
+summary(X)
+
+print("usando summary em Y")
+summary(Y)
+```
+
+
+```{r }
+
+# criar uma matriz m1(4x5)
+m1 <- array(1:20, dim=c(4,5))
+m1
+```
+
+
+```{r }
+# selecionar a primeira da matriz m1
+m1[1,]
+```
+
+```{r }
+# selecionar a primeira coluna
+m1[,1]
+```
+
+```{r }
+# selecionar o elemento da primeira linha da primeira coluna
+m1[1,1]
+```
+
+```{r }
+# remover a primeira linha da matriz m1(3x5)
+m1[-1,]
+```
+
+```{r }
+# remover a primeira coluna da matriz m1(4x4)
+m1[,-1]
+```
+
+```{r }
+
+# Listas
+# vetor1 = 25,59,30
+# vetor2 = Joao,Maria, Carlos
+# vetor3 = TRUE, FALSE, TRUE
+
+vetor1 <- c(25,59,30)
+vetor2 <- c("Joao", "Maria", "Carlos")
+vetor3 <- c(TRUE, FALSE, TRUE)
+```
+
+
+```{r }
+
+# verificar o tipo da variavel
+class(vetor3)
+```
+
+
+```{r }
+matriz1 <- cbind(vetor1,vetor2,vetor3)
+matriz1
+```
+
+
+```{r }
+
+# tipo do objeto matriz1
+class(matriz1)
+```
+
+
+```{r }
+
+matriz2 <- list(vetor1,vetor2,vetor3)
+matriz2
+```
+
+
+```{r }
+
+# data frame
+matriz2 <- as.data.frame(matriz2)
+
+str(matriz2)
+
+matriz2
+```
+
+
+```{r }
+# criar um data frame da lista
+df <- as.data.frame(matriz2)
+df
+```
+
+
+```{r }
+class(df)
+
+```
+
+
+```{r }
+
+# renomear os nomes das colunas do data frame
+colnames(df)[1] <- 'idade'
+colnames(df)[2] <- 'nome'
+colnames(df)[3] <- 'masculino'
+
+```
+
+
+```{r }
+# salvar o arquivo no formato R
+saveRDS(df, 'df.RDS')
+```
+
+
+```{r }
+# ler a arquivo no formato R no computador local
+readRDS('df.RDS')
+
+```
+
+
+
+
+```{r }
+
+# remover os objetos
+# ?rm
+
+# remover o vetor1
+rm(vetor1)
+
+
+# remover todos os objetos
+rm(list=ls())
+```
+
+
+
+# ----------------------------
+# Analise Descritiva
+# ----------------------------
+
+
+
+```{r media}
+
+# Produção diaria de dois empregados
+
+EmpregA = c(70,71,69,72,70,71,72)
+EmpregB = c(60,80,70,62,75,71,83)
+
+# Média de produção
+cat('média da produção', '\n Empregado A:', mean(EmpregA),'\n Empregado B:', mean(EmpregB))
+
+# Mediana de produção
+cat('\n mediana da produção', '\n Empregado A:', median(EmpregA),'\n Empregado B:', median(EmpregB))
+
+```
+
+```{r grafico1}
+#Se apenas um vetor do tipo numeric é fornecido a função gera uma série com os dados, seguindo a ordem que os valores estão no vetor.
+
+plot(EmpregA)
+plot(EmpregB)
+```
+
+
+?plot
+
+```{r grafico2}
+
+# mar A numerical vector of the form c(bottom, left, top, right) which gives the number of lines of margin to be specified on the four sides of the plot. The default is c(5, 4, 4, 2) + 0.1.
+
+op <- par(mar = c(5, 4, 4, 4))
+plot(EmpregA, type = "l",main="Produção de funcionarios"   ,
+     lty = 3,
+     ylim = c(60, 80),
+     lwd = 1.4,
+     xaxt = "n",
+     ylab = "Empregado A", xlab = "")
+
+op <- par(new = TRUE)
+plot(EmpregB, type = "l", 
+     ylim = c(60, 80),
+     xlab = "", ylab = "",
+     yaxt = "n", xaxt = "n",
+     lty = 1)
+
+axis(side = 4, las = 3)
+
+mtext(text = "Empregado B", 
+      side = 4,
+      las = 0,
+      line = 3)
+   
+
+```
+
+
+```{r Amplitude}
+
+# Amplitude: Avaliar a dispersão do conjunto de dados
+
+# Amplitude= Max(dados)- Min(dados)
+
+ 
+Ampl_A= max(EmpregA)- min(EmpregA)
+
+
+Ampl_B= max(EmpregB)- min(EmpregB)
+
+
+
+cat('Amplitude da produção', '\n Empregado A:', Ampl_A,'\n Empregado B:', Ampl_B)
+
+```
+
+##  Medidas de Dispersão:
+As medidas de dispersão são medidas que indicam o quão espalhados os dados estão, ou como eles variam. 
+  São elas a amplitude, a variância, o desvio padrão e o desvio absoluto. 
+  
+###Variância: 
+  uma medida que expressa quanto os dados de um conjunto estão afastados de seu valor esperado (ao quadrado). 
+  Calculamos a variância no R através da função var():
+
+  desvio médio: média aritmética dos desvios absolutos em relação á média
+  calculado da seguinte forma: primeiro, encontra-se a média dos valores;
+  calcula-se a distância em valor absoluto de cada ponto desta média; 
+  soma distâncias e dividimos o resultado pela média destas distâncias.
+  
+  
+
+```{r func_desviopadrao}
+# criar uma funcao para calculo do desvio padrao
+
+func_desviopadrao <- function(vetor) {
+  soma <- sum(vetor)
+  nobs <- length(vetor)
+  media <- soma/nobs
+  diferenca2 <- (vetor - media)^2
+  somadiferenca2 <- sum(diferenca2)
+  variancia <- somadiferenca2/(nobs-1)
+  desviopadrao <- sqrt(variancia)
+  return(desviopadrao)
+}
+
+# chamar a funcao
+desvio_padrao <- func_desviopadrao(EmpregA)
+desvio_padrao 
+
+
+```
+
+```{r usando a funcao sd}
+
+# funcao standard deviation (sd) - desvio padrao
+desvio_padrao1 <- sd(EmpregA)
+desvio_padrao1
+
+
+# ?sd
+
+```
+
+
+```{r mad}
+  
+
+# ?mad
+
+# Erro médio absoluto
+
+cat ('erro medio absoluto de Producao de cada empregado', '\n Empregado A:', mad(EmpregA),'\n Empregado B:', mad(EmpregB))
+
+
+```
+
+
+```{r variancia}
+
+
+# ?var
+# Variância
+
+cat ('Variancia Producao de cada empregado', '\n Empregado A:', var(EmpregA),'\n Empregado B:', var(EmpregB))
+
+```
+
+
+```{r desvio}
+
+
+# cálculo do desvio padrao
+
+media_empA = mean(EmpregA)
+desvio_padrao <- sqrt( sum((EmpregA - media_empA)^2 ) /length(EmpregA) )
+desvio_padrao
+
+
+cat ('desvio Producao de cada empregado', '\n Empregado A:', sd(EmpregA),'\n Empregado B:', sd(EmpregB))
+
+
+```
+
+#### Coeficiente de Variação
+  Usado quando queremos comparar duas variáveis quantitativas quanto ao seu grau de dispersão.
+  É o quociente entre o desvio-padrão e a média.
+
+  Vantagem: caracterizar a dispersão dos dados em termos relativos a seu valor médio.
+
+
+
+
+```{r coeficiente de variacao}
+
+# coeficiente de variação
+
+
+CV_A = sd(EmpregA)/mean(EmpregA)*100
+CV_B = sd(EmpregB)/mean(EmpregB)*100
+ 
+
+# Coeficiente de Variação
+cat ('Coeficiente de Variacao com relacao a Producao de cada empregado', '\n Empregado A:', CV_A ,'\n Empregado B:',CV_B )
+
+
+```
+
+
+
+# ----------------------------
+# Variável aleatória:
+# ----------------------------
+
+  É uma variável cujo valor é um resultado numérico, associado ao resultado de uma experiência aleatória.
+  É a expressão matemática de eventos sujeitos à variação natural (do acaso), seus resultados são 
+  expressos por conjuntos de um espaço amostral, e possuirá sempre uma distribuição de probabilidade.
+
+ 
+
+```{r variaveis}
+
+#  Vamos "inputar" os dados sobre tempo de atendimento de 3 agências
+
+Z= c(4,5,5,6,6,7,7,8,8,8,9,9,9,10,10,10,10,10,11,11,11,11,11,12,12,12,13,13,13,14,14,15,15,16,16,17)
+Z
+Y= c(4,4,4,4,4,4,5,5,5,5,5,5,6,6,7,7,7,14,14,14,15,15,15,16,16,16,16,16,17,17,17,17,17,17)
+Y
+K= c(8,8,8,8,9,9,9,9,10,10,10,10,10,10,11,11,11,11,11,11,12,12,12,12,13,13,13,13)
+K
+
+```
+
+#### O que podemos dizer sobre elas?
+ 
+
+```{r tamanho da amostra} 
+
+cat('tamanho das amostras por agencias - n', '\n  Z:', length(Z),'\n  Y:', length(Y), '\n  K:', length(K))
+
+```
+
+```{r perfil_1}
+
+
+# Média de Atendimento
+cat('media de atendimento', '\n Agencia Z:', mean(Z),'\n Agencia Y:', mean(Y),'\n Agencia K:', mean(K))
+
+```
+
+
+```{r perfil_2}
+
+# Mediana de Atendimento
+cat('mediana de atendimento', '\n Agencia Z:', median(Z),'\n Agencia Y:', median(Y),'\n Agencia K:', median(K))
+
+```
+
+
+
+```{r perfil_3}
+ 
+ 
+# desvios 
+cat('Desvio Padrao: ', '\n  Z:', sd(Z),'\n  Y:', sd(Y), '\n  K:', sd(K))
+
+```
+ 
+ 
+# ----------------------------
+# Gráfico Histograma:
+# ----------------------------
+
+  O histograma, também conhecido como distribuição de frequências, 
+  é a representação gráfica em colunas ou em barras (retângulos) de um conjunto de dados 
+  previamente tabulado e dividido em classes uniformes ou não uniformes.
+  A base de cada retângulo representa uma classe. 
+  A altura de cada retângulo representa a quantidade ou a frequência absoluta com que o valor da classe
+  ocorre no conjunto de dados para classes uniformes ou a densidade de frequência para classes não uniformes.
+
+ Tem como objetivo ilustrar como uma determinada amostra de dados ou população está distribuída, 
+ dispondo as informações de modo a facilitar a visualização da distribuição dos dados. 
+ Ao mesmo tempo, ressalta a localização do valor central e da distribuição dos dados em torno deste valor central.
+
+
+```{r histograma Z}
+hist(Z)
+# ?hist
+ 
+```
+
+
+```{r histograma 3}
+par(mfrow=c(1,3))
+hist(Z)
+hist(Y)
+hist(K)
+
+par(mfrow=c(1,1))
+
+```
+
+```{r histograma Y}
+
+hist(Z ,  freq = FALSE) 
+
+```
+
+
+```{r histograma ZYK}
+ 
+ # Histograma das 3 agencias
+par(mfrow=c(1,3))
+par(mar=c(10,4,8,2))
+hist(Z,  freq = FALSE,xlab="Agencia Z", ylab="Frequencia Relativa",
+     main = "Atendimentos (min)")
+hist(Y,  freq = FALSE, xlab="Agencia Y", ylab="Frequencia Relativa",
+     main = "Atendimentos (min)")
+hist(K,  freq = FALSE,xlab="Agencia K", ylab="Frequencia Relativa" ,
+     main = "Atendimentos (min)")
+
+```
+
+
+```{r Probabilidade}
+
+table(Z)
+
+prop.table(table(Z))
+
+
+(table(Z)/length(Z))*100
+
+
+
+arq_Z <- as.data.frame((table(Z)/length(Z))*100)
+arq_Z 
+
+
+arq_Y <- as.data.frame((table(Y)/length(Y))*100)
+arq_Y 
+
+
+
+arq_K <- as.data.frame((table(K)/length(K))*100)
+arq_K 
+
+
+```
+
+
+
+
+
