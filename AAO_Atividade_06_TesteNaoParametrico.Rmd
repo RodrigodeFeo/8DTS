@@ -1,0 +1,96 @@
+---
+title: "Teste de Hipotese - Não Paramétricos"
+author: "AdelaideAlves"
+date: "Nov/Dez23"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+![Figura 1.](ImagemChiQuad_definicao.png)
+
+### Teste Qui-quadrado para identificar associacao entre duas variaveis qualitativas
+    Teste de hipoteses:
+    H0: as duas variaveis sao independentes
+    H1: as duas variaveis sao dependentes
+
+    Erro de decisao: nivel de significancia (alpha) = 0.05 ou 5%
+
+    Criterio de decisao:
+    se p-valor < erro de decisao entao não aceito H0
+    se p-valor >= erro de decisao entao aceito H0
+
+
+
+####  Leitura da Base operadora e UF
+
+```{r  warning=FALSE,  message=FALSE}
+ 
+
+
+# install.packages("readxl")
+library(readxl)
+BaseUFOperadora <- read_excel("BaseUFOperadora.xlsx")
+
+```
+
+
+
+
+
+![Figura 1.](ImagemChiQuad_formula.png)
+
+
+
+```{r  warning=FALSE,  message=FALSE}
+ 
+# FrequEncia absoluta 
+table(BaseUFOperadora$UF, BaseUFOperadora$Operadora)
+
+```
+
+
+```{r  warning=FALSE,  message=FALSE}
+# Frequ?ncia relativa
+# cell percentages
+prop.table(table(BaseUFOperadora$UF, BaseUFOperadora$Operadora))
+```
+
+
+```{r  warning=FALSE,  message=FALSE}
+
+# column percentages 
+prop.table(table(BaseUFOperadora$UF, BaseUFOperadora$Operadora),2)
+```
+
+
+```{r  warning=FALSE,  message=FALSE}
+# row percentages
+print(prop.table(table(BaseUFOperadora$UF, BaseUFOperadora$Operadora),1),2)
+
+```
+
+
+```{r  warning=FALSE,  message=FALSE}
+# 2-Way Frequency Table
+Tabela2dim <- xtabs(~UF+Operadora, data=BaseUFOperadora)
+ftable(Tabela2dim) # print table
+summary(Tabela2dim, DF) # chi-square test of indepedence 
+```
+
+
+```{r  warning=FALSE,  message=FALSE}
+
+# 2-Way Cross Tabulation
+# install.packages("gmodels")
+library(gmodels)
+CrossTable(BaseUFOperadora$UF, BaseUFOperadora$Operadora ,chisq =T)
+          
+
+```
+
