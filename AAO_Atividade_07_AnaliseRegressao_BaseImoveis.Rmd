@@ -1,0 +1,376 @@
+---
+title: "Modelo de Regressao: VALOR DE Imoveis"
+date: "Dezembro 2023"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+### Estimar o valor de imóvel em função de algumas características
+
+
+```{r}
+
+# importando uma base de dados para analise:
+
+imoveis <- read.csv("Arquivo_Valorizacao_Ambiental.csv", row.names=1, sep=";")
+
+
+```
+
+
+#### Variáveis:
+
+Valor do Imóvel [Valor]: Valor do imóvel
+
+Área [Area]: Utilizou-se a área total do apartamento em metros quadrados;
+
+Idade Aparente [IA]: Idade aparente em anod
+
+Andar [Andar]: É o número do andar do apartamento;
+
+Suítes [Suites]: Número de suítes;
+
+Vista Panorâmica [Vista]: A variável ambiental vista panorâmica é uma variável dicotômica: se o apartamento tiver vista panorâmica a variável vista assume valor igual a 1, se não tiver vista seu valor será 0;
+
+Sem Ruído na rua [Sem Ruído]: A variável ambiental Sem Ruído é uma variável dicotômica: se o apartamento está localizado em rua onde o nível de ruído está abaixo do que é considerado não prejudicial terá valor 1, se tiver nível de ruído acima terá valor 0;
+
+Distância a Avenida Beira Mar [Dist. BM]: A distância é medida em metros, pelo eixo da rua do prédio onde os apartamentos estão localizados até a Avenida Beira Mar;
+
+Área Verde a uma distância de 200 metros [AV 100m]: Área verde a uma distância de 200 metros assume valor igual a 1, ultrapassando 200 metros assume valor 0.
+
+
+```{r}
+
+
+#Verificando o formato das variaveis
+str(imoveis)
+
+
+# verifica-se que nessa base as variáveis do tipo qualittativa já foram transformadas
+# em variáveis numéricas do tipo dummy
+```
+
+```{r}
+
+#Estatisticas descritivas - Medidas resumo
+summary(imoveis)
+
+
+```
+
+
+```{r}
+
+# Variável target/dependente 
+
+#pacote lattice
+
+library(lattice)
+
+histogram(imoveis$Valor ,main="Valor do imóvel - Target do estudo")
+
+
+
+```
+
+```{r}
+
+
+# Variável target/dependente 
+
+boxplot(imoveis$Valor, main="Valor" )
+
+boxplot(imoveis$Valor, main="Valor" , range=3)
+
+
+```
+
+
+
+
+```{r}
+# analise das demais variáveis
+
+
+histogram(imoveis$Area,  col = "gray")
+histogram(imoveis$IA,  col = "gray")
+histogram(imoveis$Andar,  col = "gray")
+histogram(imoveis$Suites,  col = "gray")
+histogram(imoveis$Vista,  col = "red")
+histogram(imoveis$DistBM,  col = "gray")
+histogram(imoveis$Semruido,  col = "red")
+histogram(imoveis$AV100m,  col = "red")
+
+```
+
+```{r}
+
+# só variáveis quantitativas
+
+boxplot(imoveis$Area  , main="Area")
+boxplot(imoveis$IA , main="IA")
+boxplot(imoveis$Andar , main="Andar")
+boxplot(imoveis$Suites , main="Suites")
+boxplot(imoveis$DistBM , main="DistBM")
+
+
+```
+
+### Voltando ao nosso objetivo: 
+#### Avaliar graficamente em funcao da variavel dependente/target
+
+```{r}
+
+# Grafico de dispersao para a associacao entre Area m2 e valor
+plot (x = imoveis$Area, y = imoveis$Valor,
+      main = "Grafico de dispersao",
+      xlab = "Area",
+      ylab = "Valor")
+
+#Grafico de dispersao para a associacao entre DistBM e valor
+plot (x = imoveis$DistBM, y = imoveis$Valor,
+      main = "Grafico de dispersao",
+      xlab = "DistBM",
+      ylab = "Valor")
+
+
+#Grafico de dispersao para a associacao entre IA e valor
+plot (x = imoveis$IA, y = imoveis$Valor,
+      main = "Grafico de dispersao",
+      xlab = "IA",
+      ylab = "Valor")
+
+
+```
+
+```{r}
+
+#quando a variavel independente eh uma variavel dummy
+
+boxplot(imoveis$Valor~imoveis$Vista, main='Valor Vs Vista',col=c('green','blue'))
+
+boxplot(imoveis$Valor~imoveis$Semruido, main='Valor vs sem ruido',col=c('green','blue'))
+
+boxplot(imoveis$Valor~imoveis$AV100m, main='Valor vs AV100m',col=c('green','blue'))
+
+
+
+```
+
+```{r}
+# matriz de correlacoes: somente variaveis numericas
+round(cor(imoveis),2)
+
+matcor <- cor(imoveis)
+
+```
+
+```{r}
+
+#visualizar correlacao
+
+# install.packages("corrgram")
+ library(corrgram)
+
+corrgram(matcor, type = "cor", lower.panel = panel.shade, upper.panel = panel.pie)
+
+```
+
+```{r}
+
+attach(imoveis)
+
+
+```
+
+```{r}
+## Regressao Linear Multivariada
+modelo_reg01 <- lm(Valor ~ Area+Semruido+IA+Andar+Suites+DistBM+AV100m+Vista)
+summary(modelo_reg01)
+
+
+#Podemos observar neste output as estimativas dos parametros, 
+#o erro padrao associado a cada estimativa, uma estatistica t e 
+#um p-valor associado, resultado do teste t utilizado para saber se
+#as estimativas sao realmente diferentes de zero.
+#Quanto mais asteriscos presentes ao lado do efeito estimado, 
+#maior o nivel de confianca com que podemos afirmar que o efeito 
+#nao EH nulo.
+# R-quadrado da regressao, mede a proporcao da variabilidade em Y que eh explicada por X.  
+
+
+```
+
+```{r}
+
+# selecionando variaveis por metodo automotico
+
+stepwise<-step(modelo_reg01,direction="both")
+ 
+
+summary(stepwise)
+
+```
+
+```{r}
+
+
+# Modelo final.
+modelo_regfim <- lm(Valor ~ Area+IA+Andar+Suites+Semruido+Vista, data=imoveis)
+summary(modelo_regfim)
+
+
+```
+
+```{r}
+
+# Qualidade do ajuste
+# eh possivel avaliar se as suposicoes acima estao sendo cumpridas
+# atraves da Analise de Residuos , 
+# que pode ser feita graficamente atraves dos comandos:
+  
+par(mfrow =c(2,2))
+plot(modelo_regfim, which=c(1:4), pch=20)
+
+# Primeiro Grafico: Residuos em funcao dos dos valores estimados
+# Podemos utilizar o Grafico para observar a independencia e a homocedasticidade
+
+# Segundo Grafico: Avalair a Normalidade dos Residuos 
+# a linha diagonal pontilhada representa a distribuicao normal teorica 
+# e os pontos a distribuicao dos residuos observada
+
+# Terceiro Grafico: Pode observar a mesma que o primeiro, isto eh, 
+# aleatoriedade e amplitude, desta vez com os residuos padronizados
+
+# Quarto Grafico: Distancias de Cook das observacoes,
+# uma medida de influencia que pode indicar a presenca de outliers
+# quando valor maior do que 1.
+
+
+```
+
+```{r}
+# quando os Graficos apresentam duvidas: Fazer testes estatatisticos
+
+
+#Teste de Normalidade de Shapiro Wilk
+
+# sE Valor P do teste eh pequeno, rejeita-se a hipotese de normalidade dos residuos e,
+# por consequencia, conclui-se que os erros nao sao normalmente distribuidos.
+
+
+# Teste de hipoteses
+# H0: Distribuicao Normal
+# H1: Distribuicao diferente da Normal
+# Criterio de decisao: Se p-valor < 0,05 entao rejeito H0 
+#                      Se p-valor >= 0,05 entao nao rejeito H0
+ 
+
+ shapiro.test(residuals(modelo_regfim))
+
+
+
+# O Teste de Shapiro-Wilk para normalidade 
+# avalia a aderencia dos residuos tem distribuicao Normal.
+# O p-valor se refere a hipotese de que os residuos seguem 
+# de fato uma distribuicao Normal, e essa hipotese eh rejeitada, 
+# de modo geral, quando p eh menor que 0.05
+
+```
+
+```{r}
+# aplicandoo o modelo de Regressao Linear na base imoveis
+Estima_regfim <- predict(modelo_regfim, imoveis) 
+
+```
+
+```{r}
+
+# Erro quadratico medio Real e Estimado pelo modelo de regressao
+rmse_modelo_regfim <- sqrt(mean((imoveis$Valor - Estima_regfim)^2))
+rmse_modelo_regfim
+
+
+# Erro quadratico medio Real e um valor m?dio dos im?veis
+rmse_usando_media <- sqrt(mean((imoveis$Valor - mean(imoveis$Valor))^2))
+rmse_usando_media
+
+
+
+```
+
+### Análise de Resíduos
+#### Premissas:
+
+  1 - Linearidade entre as variaveis;
+  2 - Normalidade na distribuicao dos residuos ; 
+  3 - Homocedasticidade **. Isto eh, a variancia dos erros (ou residuos) da regressao
+      Eh constante em todas as categorias ou niveis das variaveis independentes;
+  3 - As observacoss devem ser independetes.
+  4 - Ausencia de multicolinearidade
+
+
+```{r}
+# grafico residuo
+rs <- resid(modelo_regfim)
+plot(predict(modelo_regfim), rs, xlab = "Preditor linear",ylab = "Residuos")
+abline(h = 0, lty = 2)
+
+
+```
+
+```{r}
+#observa-se SE violacao da suposicao de que os erros aleatorios tem distribuicao Normal
+  
+
+qqnorm(residuals(modelo_regfim), ylab="Residuos",xlab="Quantis teoricos",main="")
+qqline(residuals(modelo_regfim))
+
+hist(residuals(modelo_regfim))
+
+```
+
+```{r}
+
+#Teste de Normalidade de Shapiro Wilk
+
+# sE Valor P do teste eh pequeno, rejeita-se a hipotese de normalidade dos residuos e,
+# por consequencia, conclui-se que os erros nao sao normalmente distribuidos.
+
+shapiro.test(residuals(modelo_regfim))
+
+```
+
+#### Quando a analise de residuos revela que o modelo utilizado nao se ajusta aos dados de maneira satisfatoria, existem estrategias que podem ser utilizadas para melhorar o ajuste:
+#. Transformacao de variaveis: Aplicar alguma funcao em Y, como logaritmo ou raiz quadrada.
+#. Adicao de termo quadr\tico: X^2
+#. Adicao de interacao entre variaveis: X1*X2
+#. Escolha de outro tipo de modelo linear: polinomial, segmentado, de efeitos aleatorios
+#. Escolha de outro tipo de modelo nao necessariamente linear: GLMs, modelos nao-lineares
+#. Outra escolha eh trabalhar com Regressoes Penalizadas(Ridge e Lasso)
+#. Problema de multicolinearidade aplicar técnicas de redução da dimensionalidade
+
+
+
+```{r}
+# usando uma transformação da variavel dependente
+
+histogram(imoveis$Valor)
+
+logvalor <- sqrt(imoveis$Valor)
+histogram(logvalor)
+
+
+```
+
