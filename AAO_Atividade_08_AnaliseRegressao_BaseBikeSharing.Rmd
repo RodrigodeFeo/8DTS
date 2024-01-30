@@ -248,6 +248,7 @@ df1 <- df
 
 df1$fxcnt_num <- ntile(df$cnt, 4)  
 
+summary(df$cnt)
 
 # transformando em variavel categórica e colocando label nas categorias
 
