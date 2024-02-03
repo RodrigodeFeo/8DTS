@@ -1,0 +1,247 @@
+---
+title: "Clusters"
+author: "AdelaideAlves"
+date: "Fevereiro 2024"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+#### .
+  A partir de uma amostra de clientes ativos e 
+  com as informacoes de Recencia, Frequencia e Valor 
+  Crie clusters de clientes e estrategias para fidelizacao
+  Ler arquivo csv
+
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+```{r}
+# Ler arquivo csv
+
+BaseRFV <- read.csv("BaseRFV.csv", row.names=1)
+ 
+
+```
+
+```{r}
+ #Verificando o formato das variaveis
+str(BaseRFV )
+```
+
+```{r}
+#Estatisticas descritivas
+summary(BaseRFV)
+```
+ 
+#  Variaveis numericas sem variavel Target
+ 
+
+```{r}
+#comando para gerar em 4 linhas e duas colunas os histogramas
+par(mfrow=c(1,3))
+
+hist(BaseRFV$compras)
+hist(BaseRFV$recencia)
+hist(BaseRFV$valor)
+
+ 
+```
+
+```{r}
+
+boxplot(BaseRFV$compras, main="compras")
+boxplot(BaseRFV$recencia , main="recencia")
+boxplot(BaseRFV$valor , main="valor")
+
+
+par (mfrow=c(1,1))
+
+```
+
+```{r}
+# matriz de correlacoes
+matcor <- cor(BaseRFV)
+print(matcor, digits = 2)
+
+
+```
+
+```{r} 
+# install.packages("corrgram")
+library(corrgram)
+
+corrgram(matcor, type = "cor", lower.panel = panel.shade, upper.panel = panel.pie)
+
+panel.cor <- function(x, y, digits=2, prefix ="", cex.cor,
+    ...)  {
+    usr <- par("usr")
+    on.exit(par(usr))
+    par(usr = c(0, 1, 0, 1))
+    r <- cor(x, y , use = "pairwise.complete.obs")
+    txt <- format(c(r, 0.123456789), digits = digits) [1]
+    txt <- paste(prefix, txt, sep = "")
+    if (missing(cex.cor))
+        cex <- 0.8/strwidth(txt)
+# abs(r) ? para que na sa?da as correla??es ficam proporcionais
+    text(0.5, 0.5, txt, cex = cex * abs(r))
+}
+
+
+#pdf(file = "grafico.pdf")
+pairs(BaseRFV, lower.panel=panel.smooth, upper.panel=panel.cor)
+
+```
+
+
+```{r}
+
+### ######################################### ###
+###                                           ###
+### como criar grupos com esta base de BaseRFV ###
+###                                           ###
+### ######################################### ###
+
+
+# criar grupos de BaseRFV de  acordo com o desempenho dos recoredes femininos.
+
+attach(BaseRFV)
+
+Padr_BaseRFV <- data.frame(scale(BaseRFV))
+
+ 
+```
+
+```{r}
+summary(Padr_BaseRFV)
+
+```
+
+```{r}
+#metodo hierarquico
+
+hier_cluster<-hclust(dist(Padr_BaseRFV),method='ward.D')
+d1 <- dist(Padr_BaseRFV, method = "euclidean") # distance matrix
+plot(hier_cluster, ylab='distancia', cex=0.6)
+
+```
+
+```{r}
+plot(hier_cluster, ylab='distancia', cex=0.6)
+groups <- cutree(hier_cluster, k=5) # cut tree into 5 clusters
+# draw dendogram with red borders around the 5 clusters
+rect.hclust(hier_cluster, k=5, border="red") 
+
+groups <- cutree(hier_cluster, k=6) # cut tree into 6 clusters
+# draw dendogram with red borders around the 6 clusters
+rect.hclust(hier_cluster, k=6, border="blue") 
+
+
+groups <- cutree(hier_cluster, k=7) # cut tree into 7 clusters
+# draw dendogram with red borders around the 7 clusters
+rect.hclust(hier_cluster, k=7, border="green") 
+
+# Outros metodos que podem ser usados sao: "ward", "single", "complete", "average", "mcquitty", "median" ou "centroid".
+# A definicao de qual metodo usar varia com o objetivo do estudo e com o tipo de matriz de distancia usada.
+
+```
+  metodo nao hierarquico
+  
+```{r}
+
+#metodo nao hierarquico
+
+# Determine number of clusters
+set.seed(123)
+wss_BaseRFV <- (nrow(Padr_BaseRFV )-1)*sum(apply(Padr_BaseRFV ,2,var))
+for (i in 1:30) wss_BaseRFV[i] <- sum(kmeans(Padr_BaseRFV ,iter.max=100,
+                                     centers=i)$withinss)
+plot(1:30, wss_BaseRFV, type="b", xlab="Number of Clusters",
+     ylab="Within groups sum of squares") 
+
+```
+ 
+  
+```{r}
+# Gerando a quantidade de cluster com Kmeans
+attach(Padr_BaseRFV)
+set.seed(123)
+output_cluster_1 <-kmeans(Padr_BaseRFV,7,iter=100)
+output_cluster_1
+
+```
+ 
+  
+```{r}
+
+# quantas entidade dentro de cada cluster
+segmento<-output_cluster_1$cluster
+table (segmento)
+prop.table(table(segmento))
+```
+ 
+  
+```{r}
+
+# quais caracteristicas  de cada cluster
+centros<-output_cluster_1$centers
+centros
+```
+ 
+  
+```{r}
+# quantas rodadas ate chegar nos clusters
+Qte_iter<-output_cluster_1$iter
+Qte_iter
+```
+ 
+  
+```{r}
+
+# Mostrando Resultados
+aggregate(BaseRFV,by=list(segmento),FUN=mean)
+```
+ 
+  
+```{r}
+
+aggregate(BaseRFV,by=list(segmento),FUN=sum)
+
+```
+ 
+  
+```{r}
+# Mostrando Resultados em graficos
+
+# Cluster Plot against 1st 2 principal components
+# vary parameters for most readable graph
+# install.packages("cluster")
+
+library(cluster)
+clusplot(Padr_BaseRFV, output_cluster_1$cluster, color=TRUE, shade=TRUE,
+         labels=2, lines=0 , cex=0.75)
+```
+ 
+  
+```{r}
+# Centroid Plot against 1st 2 discriminant functions
+# install.packages("fpc")
+library(fpc)
+
+plotcluster(Padr_BaseRFV , output_cluster_1$cluster) 
+
+```
+ 
+  
+
