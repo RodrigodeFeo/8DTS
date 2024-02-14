@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitetura de Dados em Nuvem</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .diagram {
+    max-width: 100%;
+    border: 2px solid #333;
+    padding: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="diagram">
+    <pre>
+                                            +---------------------+
+                                            |    Data Sources     |
+                                            +----------+----------+
+                                                       |
+                                                       |
+                                              +--------|--------+
+                                              |                 |
+                                              |                 |
+                                +-------------|-------------+   |
+                                |             |             |   |
+                         [Ingestion Pipeline - Kafka]        |
+                                |             |             |   |
+                       +--------|--------+    |             |   |
+                       |        |        |    |             |   |
+                [Data Lake]   [Data Warehouse] |   [Data Processing]
+                  /      \           |        |             |   |
+       [Storage] -----   |           |        |             |   |
+                         |           |        |             |   |
+                         |           |        |             |   |
+              +----------|-----------|--------|-------------|--------+
+              |          |           |        |             |        |
+      [Data Visualization]  | [Machine Learning]            [Data Consumption]
+              |          |           |                       /     \
+              |          |           |                      /       \
+              |          |           |           [Business Applications]
+              |          |           |                      \       /
+              |          |           |                       \     /
+              +----------+-----------+------------------------+---+
+    </pre>
+  </div>
+</div>
+</body>
+</html>
